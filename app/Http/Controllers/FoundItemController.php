@@ -242,13 +242,27 @@ class FoundItemController extends Controller {
 		$input=$requestitem->all();
 		$request=new \stdClass();		
 
-		$request->dateRange=$requestitem->dateRange;
-		$request->itemType=$requestitem->itemType;
-		$request->category=$requestitem->category;
-		$request->searchTerm=$requestitem->searchTerm;
+		$request->dateRange=$requestitem['dateRange'];
+		$request->itemType=$requestitem['itemType'];
+		$request->category=$requestitem['category'];
+		$request->searchTerm=$requestitem['searchTerm'];
 		
 		
-		$item=\App\Services\ItemService::filterSearch($request);
+		$advanced=$request['advanced'];
+		
+		if($advanced){
+			$request->shape=$requestitem['shape'];
+			$request->color=$requestitem['color'];
+			$request->width=$requestitem['width'];
+			$request->length=$requestitem['length'];
+			$request->other_details=$requestitem['other_details'];
+			
+			$item=\App\Services\ItemService::advancedFilter($request);
+		}
+		else {
+			$item=\App\Services\ItemService::filterSearch($request);
+		
+		}
 
 		if($item){
 			return \Response::json($item)->getContent();
