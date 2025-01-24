@@ -242,20 +242,18 @@ class FoundItemController extends Controller {
 		$input=$requestitem->all();
 		$request=new \stdClass();		
 
-		$request->dateRange=$requestitem['dateRange'];
-		$request->itemType=$requestitem['itemType'];
-		$request->category=$requestitem['category'];
-		$request->searchTerm=$requestitem['searchTerm'];
+		$request->dateRange=$input['dateRange'];
+		$request->itemType=$input['itemType'];
+		$request->category=$input['category'];
+		$request->searchTerm=$input['searchTerm'];
 		
-		
-		$advanced=$request['advanced'];
-		
-		if($advanced){
-			$request->shape=$requestitem['shape'];
-			$request->color=$requestitem['color'];
-			$request->width=$requestitem['width'];
-			$request->length=$requestitem['length'];
-			$request->other_details=$requestitem['other_details'];
+		$advanced=$input['advanced'];
+		if($advanced==true){
+			$request->shape=$input['shape'];
+			$request->color=$input['color'];
+			$request->width=$input['width'];
+			$request->length=$input['length'];
+			$request->other_details=$input['other_details'];
 			
 			$item=\App\Services\ItemService::advancedFilter($request);
 		}

@@ -9,10 +9,9 @@ class StatusType extends Eloquent {
 
 	public function itemStatus(){
 //		return $this->hasMany("\App\Models\Items","log_id")->whereRaw("log_type in ('cash','shortage','deposit') and transaction_type not in ('catransfer')");
-		return $this->hasMany("\App\Models\ItemStatus","log_id");
+		return $this->belongsTo("\App\Models\ItemStatus");
 
 	
 	}
-
 }
 ?>

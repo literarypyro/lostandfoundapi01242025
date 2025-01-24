@@ -778,21 +778,18 @@ class ItemService {
 		$conditionClause.=\App\Services\ItemService::conditionBuilder("color",$color);
 		$conditionClause.=\App\Services\ItemService::conditionBuilder("width",$width);
 		$conditionClause.=\App\Services\ItemService::conditionBuilder("length",$length);
-		$conditionClause.=\App\Services\ItemService::conditionBuilder("other_details",$other_details);
-		
-		if($searchTerm!=""){
-			$conditionClause.=" and UPPER(description) like '%%".strtoupper($searchTerm)."%%' ";
-			
-		}
+//		$conditionClause.=\App\Services\ItemService::conditionBuilder("other_details",$other_details);
+
+		$conditionClause.=\App\Services\ItemService::conditionBuilder("description",$searchTerm);
 		
 		
-		
-		$item=DB::table("items")->join("found_records",'items.found_record_id','=','found_records.id')->join("item_details",'item_details.item_id','=','items.id')->whereRaw("found_date between '".$start_date." 00:00:00' and '".$end_date." 23:59:59' ".$conditionClause." order by found_date desc")->get();	
+		$conditionalClause="found_date between '".$start_date." 00:00:00' and '".$end_date." 23:59:59' ".$conditionClause." order by found_date desc";	
+		$item=DB::table("items")->join("found_records",'items.found_record_id','=','found_records.id')->join("item_details",'item_details.item_id','=','items.id')->whereRaw($conditionalClause)->get();	
 		if($item){
 		
 		
 			foreach($item as $i){
-				$i->latest_stat=\App\Services\ItemService::getLatestStatus($i->id);
+				$i->latest_stat=\App\Services\ItemService::getLatestStatus($i->item_id);
 				$i->category=\App\Services\ItemService::getCategory($i);	
 
 				$i->item_type=\App\Services\ItemService::getItemType($i);	
@@ -809,11 +806,20 @@ class ItemService {
 	}
 
 	public static function conditionBuilder($type,$term){
-		if($term!=""){
-			return " and ".$type."='".$term."' ";	
+		if(($term!="") && ($term!="N/A") && ($term!="undefined")){
+
+			if($type=="description"){
+				return " and UPPER(description) like '%%".strtoupper($term)."%%' ";
 			
+			}
+			else {
+				return " and ".$type."='".$term."' ";	
+			}
 		}
 		else {
+
+
+
 			return "";
 		}
 	}
@@ -1026,9 +1032,11 @@ class ItemService {
 								
 								if($itemType){
 								$duration=($itemType->duration)." days";
+								$expiration_date=date("Y-m-d",strtotime($foundDate." +".$duration));		
+
 								}
 								
-								$expiration_date=date("Y-m-d",strtotime($foundDate." +".$duration));		
+								
 
 								
 								if($itemType){
@@ -1038,10 +1046,12 @@ class ItemService {
 								$recent_date=date("Y-m-d");
 								
 								if(strtotime($recent_date)>=strtotime($expiration_date)){
-									$expired_items[$m]=$items[$k];
-									$m++;
-									$items[$k]->expired=true;
-
+									
+									if($itemType){
+										$expired_items[$m]=$items[$k];
+										$m++;
+										$items[$k]->expired=true;
+									}
 									
 								}
 								else {
