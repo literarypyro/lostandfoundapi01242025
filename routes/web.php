@@ -43,6 +43,10 @@ Route::get('/', function () {
 	Route::get('/recentlist', ['as' => 'request', 'uses' => 'FoundItemController@recentList']);
 	Route::get('/all', ['as' => 'request', 'uses' => 'FoundItemController@allList']);
 
+	Route::post('/filter', ['as' => 'request', 'uses' => 'FoundItemController@filterSearch']);
+
+
+
 
 	Route::get('/daterangesearch/{search_type}/{search_term}/range/{daterange}', ['as' => 'request', 'uses' => 'FoundItemController@dateRangeSearch']);
 
