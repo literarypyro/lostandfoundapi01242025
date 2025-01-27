@@ -6,6 +6,7 @@ use App\Models;
 use App\Services\UserService;
 use App\Services\ItemRequestService;
 
+use Intervention\Image\ImageManagerStatic as Image;
 
 class ItemRequestService {
 	
@@ -278,16 +279,14 @@ if($details){ $details=$details->toArray(); }
 			$claim=new \App\Models\Claim;
 			$claim->status_id=$status->id;
 			$claim->request_id=$request->request_id;
-//			$claim->picture=$request->picture;
 			$claim->details=$request->details;
 			$claim->claim_date=$request->claim_date;
 		
 			$claim->save();
 			
-			
-			if($claim->picture){
+			if($request->picture){
 				
-				addClaimPhoto($claim,$request);
+				\App\Services\ItemRequestService::addClaimPhoto($claim,$request);
 			}
 		}
 		

@@ -156,7 +156,16 @@ class RequestController extends Controller {
 		$request=new \stdClass();
 		$request->claim_date=$input['claim_date'];
 		$request->request_id=$input['request_id'];
-		$request->picture=$reqItem->file('file');
+		
+		
+		if ($reqItem->hasFile('file')) {
+			$file = $reqItem->file('file');		
+		
+			$request->picture=$file;
+		}
+		
+		
+		
 		$request->details=$input['details'];
 		
 		$response=\App\Services\ItemRequestService::addClaim($request);
