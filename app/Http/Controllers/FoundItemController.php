@@ -226,10 +226,10 @@ class FoundItemController extends Controller {
 	}
 	public function removeItem($id){
 		
-		$input = Request::all();
-		$request=new stdClass();
+//		$input = Request::all();
+//		$request=new stdClass();
 
-		$item_id=$id;
+//		$item_id=$id;
 		
 		$key=\App\Services\DeleteItemService::deleteItem($id);
 

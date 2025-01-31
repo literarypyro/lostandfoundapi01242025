@@ -133,7 +133,7 @@ class AddItemService {
 //		$item->found_date=$request->found_date;
 		
 		$item->save();
-
+/*
 		if(($request->category=="4")||($request->category=="21")){
 			
 			if($request->identification_ref_no==""){
@@ -147,7 +147,7 @@ class AddItemService {
 					
 			
 		}
-
+*/
 		return $item->id;
 	
 

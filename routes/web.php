@@ -62,6 +62,7 @@ Route::get('/', function () {
 	Route::get('/allexpired', ['as' => 'request', 'uses' => 'FoundItemController@markAllExpired']);
 
 	Route::post('/edititem/{id}/{type}', ['as' => 'request', 'uses' => 'FoundItemController@modifyItem']);
+	Route::get('/rmitem/{id}', ['as' => 'request', 'uses' => 'FoundItemController@removeItem']);
 
 
 	Route::get('/disposed', ['as' => 'request', 'uses' => 'FoundItemController@listDisposed']);
